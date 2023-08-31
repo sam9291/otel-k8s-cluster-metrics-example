@@ -129,4 +129,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: demo-otel-collector
-    namespaces: beslogic-test
+    namespace: beslogic-test
