@@ -11,8 +11,14 @@ data:
   demo-collector.yaml: |
     receivers:
       k8s_cluster:
+    processors:
+      batch:
     exporters:
       logging:
+      datadog:
+        api:
+          site: datadoghq.com
+          key: ${env:DD_API_KEY}
     service:
       telemetry:
         logs:
@@ -20,8 +26,8 @@ data:
       pipelines:
         metrics:
           receivers: [k8s_cluster]
-          processors: []
-          exporters: [logging]
+          processors: [batch]
+          exporters: [logging, datadog]
 ---
 apiVersion: apps/v1
 kind: Deployment
