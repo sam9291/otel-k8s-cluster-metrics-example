@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: demo-collector-config
+data:
+  demo-collector.yaml: |
+    receivers:
+      k8s_cluster:
+    exporters:
+      logging:
+    service:
+      telemetry:
+        logs:
+          level: "debug"
+      pipelines:
+        metrics:
+          receivers: [k8s_cluster]
+          processors: []
+          exporters: [logging]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-otel-collector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-otel-collector
+  template:
+    metadata:
+      labels:
+        app: demo-otel-collector
+    spec:
+      containers:
+        - name: otelcol
+          args:
+            - --config=/conf/demo-collector.yaml
+          image: otel/opentelemetry-collector-contrib:0.83.0
