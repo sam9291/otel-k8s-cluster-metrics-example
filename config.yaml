@@ -37,3 +37,13 @@ spec:
           args:
             - --config=/conf/demo-collector.yaml
           image: otel/opentelemetry-collector-contrib:0.83.0
+          volumeMounts:
+            - mountPath: /conf
+              name: demo-collector-config
+      volumes:
+        - configMap:
+            items:
+              - key: demo-collector.yaml
+                path: demo-collector.yaml
+            name: demo-collector-config
+          name: demo-collector-config
